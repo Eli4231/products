@@ -38,5 +38,20 @@ router.post('/',upload.single('myFile'),(req,res)=>{
 res.json({message:"ok"})
 })
 
+router.delete('/:id',(req,res)=>{
+    let id = Number(req.params.id);
+    if(isNaN(id)){
+        return res.json({message:"לא חוקי"})
+    }
+    let product = products[id];
+    if(!product){
+        return res.json("לא קיים");
+    }
+    products[id] = null;
+    if(!fs.existsSync(path.join('images',product.myFilename))){
+         fs.unlinkSync(path.join('images',product.myFilename))
+    }
+})
+
 
 module.exports=router;
