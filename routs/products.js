@@ -47,10 +47,51 @@ router.delete('/:id',(req,res)=>{
     if(!product){
         return res.json("לא קיים");
     }
-    products[id] = null;
+    
     if(!fs.existsSync(path.join('images',product.myFilename))){
          fs.unlinkSync(path.join('images',product.myFilename))
     }
+    products[id] = null;
+    res.json({massege:"ok"});
+})
+
+router.get('/id:',(req,res)=>{
+     let id = Number(req.params.id);
+    if(isNaN(id)){
+        return res.json({message:"לא חוקי"})
+    }
+      let product = products[id];
+    if(!product){
+        return res.json("לא קיים");
+    }
+   res.json(product);
+
+})
+
+router.patch('/:id',upload.single('myFile'),(req,res)=>{
+    
+      let id = Number(req.params.id);
+    if(isNaN(id)){
+        return res.json({message:"לא חוקי"})
+    }
+      let product = products[id];
+    if(!product){
+        return res.json("לא קיים");
+    }
+     let oldFilename = product.myFilename;
+     let newFilename = req.file? req.file.filename:null;
+     if(oldFilename&&newFilename&&newFilename!==oldFilename){
+        if(!fs.existsSync('images',oldFilename)){
+    fs.mkdirSync('images',oldFilename);
+    }
+    product.myFilename = newFilename;
+     }
+     let name =req.body.name;
+     let price = parseFloat(req.body.price);
+     if(name) product.name=name;
+     if(price) product.price=price;
+     res.json({massege:ok});
+     
 })
 
 
