@@ -1,8 +1,7 @@
 const express =require('express');
-const path =require('path');
 const app = express();
 const port =3500;
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(__dirname));
 
 
 
@@ -10,7 +9,7 @@ app.use(express.static(path.join(__dirname,'public')));
 
 //routers
 app.get('/',(req,res)=>{
-res.sendFile(__dirname+'/index.html');
+res.sendFile(__dirname+'public/index.html');
 })
 const products =require('./routs/products')
 app.use('/products',products);
